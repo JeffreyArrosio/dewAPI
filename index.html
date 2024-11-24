@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FURBO</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&family=DM+Serif+Text:ital@0;1&family=Londrina+Sketch&display=swap"
+        rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -16,28 +21,35 @@
         crossorigin="anonymous"></script>
 
 <body class="bg-dark">
-    <header class="container-fluid d-flex justify-content-between p-3">
+    <header class="container-fluid d-flex justify-content-between align-items-center p-3">
+        <h1 class="display-1">FURBO</h1>
         <div>
-            <span id="ESP">LaLiga</span>
-            <span id="ENG">Premier League</span>
-            <span id="ITA">Serie A</span>
-            <span id="GER">Bundesliga</span>
+            <span id="home" class="h2 mx-3 puntero">Home</span>
+            <span id="ESP" class="h2 mx-3 puntero">LaLiga</span>
+            <span id="ENG" class="h2 mx-3 puntero">Premier League</span>
+            <span id="ITA" class="h2 mx-3 puntero">Serie A</span>
+            <span id="GER" class="h2 mx-3 puntero">Bundesliga</span>
         </div>
-        <h1>FURBO</h1>
-        <div>
-            <button id="antiguo">Antigüedad</button> 
-            <button id="estadio">Capacidad Estadio</button>  
-            <button id="az">Alfabético</button>      
-        </div>
-
     </header>
     <main class="container">
         <div class="row p-3">
 
         </div>
     </main>
-    <footer class="container-fluid">
-        Footer
+    <footer class="container-fluid  justify-content-center d-flex align-items-center">
+        <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title"
+                rel="cc:attributionURL" href="https://github.com/JeffreyArrosio/dewAPI">API Furbo</a> by <span
+                property="cc:attributionName">Jeffrey Arrosio</span> is licensed under <a
+                href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank"
+                rel="license noopener noreferrer" style="display:inline-block;">CC BY-NC-SA 4.0<img
+                    style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                    src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img
+                    style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                    src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img
+                    style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                    src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img
+                    style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                    src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
     </footer>
     <script src="app.js"></script>
 </body>

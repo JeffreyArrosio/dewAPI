@@ -3,6 +3,7 @@ const ESP = document.querySelector("#ESP")
 const ENG = document.querySelector("#ENG")
 const ITA = document.querySelector("#ITA")
 const GER = document.querySelector("#GER")
+const home = document.querySelector("#home")
 const arrayESP = []
 const arrayENG = []
 const arrayITA = []
@@ -11,9 +12,6 @@ const tablaESP = []
 const tablaENG = []
 const tablaITA = []
 const tablaGER = []
-const botonAntiguo = document.getElementById("antiguo")
-const botonEstadio = document.getElementById("estadio")
-const botonAZ = document.getElementById("az")
 let ligaActual
 let contador
 
@@ -27,24 +25,84 @@ function init() {
     ENG.addEventListener('click', fetchPremier)
     ITA.addEventListener('click', fetchSerieA)
     GER.addEventListener('click', fetchBundesliga)
+    home.addEventListener('click', setHome)
+    setHome()
+}
+
+function cargando() {
+    main.innerHTML = ""
+    const load = document.createElement('div')
+    load.classList.add("loader")
+    load.innerHTML = `
+        <img src="images/bola.gif" alt="">
+    `
+    main.appendChild(load)
+}
+
+function setHome() {
+    main.innerHTML = ""
+    const div = document.createElement('div')
+    div.classList.add("mb-5")
+    div.innerHTML = `
+        <div class="d-flex align-items-center mt-5 esp puntero">
+            <img src="images/LaLiga-Logo.png" alt="" width="150px" height="150px">
+            <h1 class="display-1 mx-3">LA LIGA ESPAÑOLA</h1>
+        </div>
+        <div class="d-flex align-items-center mt-5 eng puntero">
+            <img src="images/premier.png" alt="" width="150px" height="150px">
+            <h1 class="display-1 mx-3">PREMIER LEAGUE INGLESA</h1>
+        </div>
+        <div class="d-flex align-items-center mt-5 ita puntero">
+            <img src="images/serieA.png" alt="" width="150px" height="150px">
+            <h1 class="display-1 mx-3">SERIE A ITALIANA</h1>
+        </div>
+        <div class="d-flex align-items-center mt-5 ger puntero">
+            <img src="images/bundes.png" alt="" width="150px" height="150px">
+            <h1 class="display-1 mx-3">BUNDESLIGA ALEMANA</h1>
+        </div>
+    `
+    main.appendChild(div)
+    eventosHome()
+}
+
+function eventosHome() {
+    const homeESP = document.querySelector(".esp")
+    const homeENG = document.querySelector(".eng")
+    const homeITA = document.querySelector(".ita")
+    const homeGER = document.querySelector(".ger")
+    homeESP.addEventListener('click', fetchLaLiga)
+    homeENG.addEventListener('click', fetchPremier)
+    homeITA.addEventListener('click', fetchSerieA)
+    homeGER.addEventListener('click', fetchBundesliga)
+}
+
+function eventosOrden() {
+    const botonAntiguo = document.getElementById("antiguo")
+    const botonEstadio = document.getElementById("estadio")
+    const botonAZ = document.getElementById("az")
     botonAntiguo.addEventListener('click', ordenAntiguo)
     botonEstadio.addEventListener('click', ordenEstadio)
     botonAZ.addEventListener('click', ordenAlfabetico)
 }
 
-function fetchLaLiga() {
+async function fetchLaLiga() {
     contador = 1
     ligaActual = 'ESP'
+    let loader
     arrayESP.length == 0 ?
-        fetch("https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=Spanish La Liga", option)
+        await fetch("https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=Spanish La Liga", option)
             .then(response => {
                 if (response.ok) {
+                    cargando()
+                    loader = document.querySelector(".loader")
+                    loader.display = 'block'
                     return response.json()
                 } else {
                     throw new Error(`Error: ${response.status}`);
                 }
             })
             .then(data => {
+                loader.display = 'none'
                 vistaEquipos(arrayESP, data)
             })
             .catch(error => {
@@ -128,6 +186,15 @@ function vistaEquipos(array, data = null) {
         guardarEquipos(data, array)
         creaTabla(array)
     }
+    const orden = document.createElement('div')
+    orden.classList.add("text-center", "mb-3")
+    orden.innerHTML = `
+        <button id="antiguo" class="btn btn-success">Antigüedad</button> 
+        <button id="estadio" class="btn btn-success">Capacidad Estadio</button>  
+        <button id="az" class="btn btn-success">Alfabético</button>      
+    `
+    main.appendChild(orden)
+    eventosOrden()
     for (let i = 0; i < array.length; i++) {
         const equipo = document.createElement("span")
         equipo.classList.add("card", "col-3")
@@ -137,7 +204,7 @@ function vistaEquipos(array, data = null) {
         equipo.style.color = array[i].strColour2
         equipo.innerHTML = `
             <div class="card-body text-center">
-            <img src="${array[i].strBadge}" class="card-img-top" alt="...">
+            <img src="${array[i].strBadge}" class="card-img-top puntero" alt="...">
             <h5 class="card-title" >${array[i].strTeam}</h5>
             </div>
         `
@@ -173,7 +240,7 @@ function creaTabla(array) {
         const posicion = {
             equipo: e.strTeam,
             escudo: e.strBadge,
-            puntos: Math.floor((Math.random() * 60) + 9)
+            puntos: Math.floor((Math.random() * 65) + 13)
         }
         tabla.push(posicion)
     });
@@ -200,7 +267,7 @@ function vistaTabla() {
     h1.textContent = "Clasificación"
     main.appendChild(h1)
     const tablaEquipos = document.createElement('table')
-    tablaEquipos.classList.add('table', 'table-dark', 'table-striped',"mt-4")
+    tablaEquipos.classList.add('table', 'table-dark', 'table-striped', "mt-4")
     tablaEquipos.innerHTML = `
         <thead>
             <tr>
@@ -219,24 +286,24 @@ function vistaTabla() {
         else if (i > tabla.length - 4 && i <= tabla.length - 1) puesto.classList.add('table-danger')
         let random = []
         for (let i = 0; i < 5; i++) {
-            let num = Math.floor(Math.random()*100)
-            if(num%3 == 0){
+            let num = Math.floor(Math.random() * 100)
+            if (num % 3 == 0) {
                 random[i] = {
                     result: "E",
                     class: "bg-warning"
                 }
-            }else if(num%3 == 1){
+            } else if (num % 3 == 1) {
                 random[i] = {
                     result: "V",
                     class: "bg-success"
                 }
-            }else{
+            } else {
                 random[i] = {
                     result: "D",
                     class: "bg-danger"
                 }
             }
-            
+
         }
         puesto.innerHTML = `
             <td>${i + 1}</td>
@@ -258,9 +325,9 @@ function vistaTabla() {
     leyenda()
 }
 
-function leyenda(){
+function leyenda() {
     const leyenda = document.createElement('div')
-    leyenda.classList.add("mt-4","mb-4")
+    leyenda.classList.add("mt-4", "mb-4")
     leyenda.innerHTML = `
         <div class="row mt-1">
             <div class="col-1 bg-success"></div>
@@ -291,19 +358,19 @@ function muestraEquipo(id, array) {
     let equipo = array.find(e => e.idTeam == id)
     main.innerHTML = ""
     const contenido = document.createElement('div')
-    contenido.classList.add('equipo')
+    contenido.classList.add('equipo', "text-center")
     contenido.innerHTML = `
         <h1 class="d-flex justify-content-between">
             ${equipo.strTeam}
             <button id="back">Volver</button>      
         </h1>
-        <img src="${equipo.strBadge}" alt="">
-        <p>Liga: ${equipo.strLeague}</p>
-        <p>Estadio: ${equipo.strStadium}</p>
-        <p>Capacidad: ${equipo.intStadiumCapacity}</p>
-        <p>Año fundación: ${equipo.intFormedYear}</p>
-        <p>Descripción (ENG): ${equipo.strDescriptionEN} </p>
-        <p> Equipación: </p>
+        <img src="${equipo.strBadge}" alt="" >
+        <p class="h2 mt-1 borde" style="background-color:${equipo.strColour1} ;">Liga: ${equipo.strLeague}</p>
+        <p class="h2 mt-1 borde" style="background-color:${equipo.strColour1} ;">Estadio: ${equipo.strStadium}</p>
+        <p class="h2 mt-1 borde" style="background-color:${equipo.strColour1} ;">Capacidad: ${equipo.intStadiumCapacity}</p>
+        <p class="h2 mt-1 borde" style="background-color:${equipo.strColour1} ;">Año fundación: ${equipo.intFormedYear}</p>
+        <p class="mt-1 borde p-3" style="background-color:${equipo.strColour1} ;">Descripción (ENG): ${equipo.strDescriptionEN} </p>
+        <p class="mt-1 borde" style="background-color:${equipo.strColour1} ;"> Equipación: </p>
         <img src="${equipo.strEquipment}" alt="">
     `
     contenido.querySelector('h1 button').addEventListener('click', volverAtras)
